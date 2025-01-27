@@ -36,7 +36,7 @@ const blue = Color(0xFF0000FF);
 const navy = Color(0xFF000080);
 const purple = Color(0xFF800080);
 
-List<Color> rainbow = [
+List<Color> classic = [
   Colors.red,
   Colors.orange,
   Colors.yellow,

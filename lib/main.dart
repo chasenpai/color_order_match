@@ -1,7 +1,9 @@
+import 'package:color_order_match/config/di_setup.dart';
 import 'package:color_order_match/config/router.dart';
 import 'package:flutter/material.dart';
 
 void main() {
+  diSetup();
   runApp(const MyApp());
 }
 

@@ -12,7 +12,7 @@ class ReadyScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         leading: IconButton(
           onPressed: () {
-
+            context.pop();
           },
           icon: const Icon(
             Icons.arrow_back,
@@ -61,7 +61,7 @@ class ReadyScreen extends StatelessWidget {
                             Row(
                               children: [
                                 ColorGroupButton(
-                                  groupName: 'Rainbow',
+                                  groupName: 'Classic',
                                   colors: const [
                                     Colors.red,
                                     Colors.orange,
