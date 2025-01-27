@@ -45,8 +45,8 @@ class HomeScreen extends StatelessWidget {
                                   left: 5,
                                   top: 14,
                                   child: Container(
-                                    height: 18.0,
-                                    width: 18.0,
+                                    height: 16.0,
+                                    width: 16.0,
                                     decoration: const BoxDecoration(
                                       color: turquoise,
                                     ),
@@ -56,8 +56,8 @@ class HomeScreen extends StatelessWidget {
                                   left: 26.5,
                                   bottom: 16,
                                   child: Container(
-                                    height: 18.0,
-                                    width: 18.0,
+                                    height: 16.0,
+                                    width: 16.0,
                                     decoration: const BoxDecoration(
                                       color: orange,
                                     ),
@@ -67,8 +67,8 @@ class HomeScreen extends StatelessWidget {
                                   right: 106,
                                   top: 0,
                                   child: Container(
-                                    height: 18.0,
-                                    width: 18.0,
+                                    height: 16.0,
+                                    width: 16.0,
                                     decoration: const BoxDecoration(
                                       color: violet,
                                     ),
@@ -78,8 +78,8 @@ class HomeScreen extends StatelessWidget {
                                   right: 0,
                                   bottom: 32.0,
                                   child: Container(
-                                    height: 18.0,
-                                    width: 18.0,
+                                    height: 16.0,
+                                    width: 16.0,
                                     decoration: const BoxDecoration(
                                       color: skyBlue,
                                     ),
@@ -91,11 +91,14 @@ class HomeScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 6.0,),
                         const Center(
-                          child: Text(
-                            'Challenge Your Memory, Match the Colors!',
-                            style: TextStyle(
-                              fontSize: 16.0,
-                              color: Colors.black87,
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              'Challenge Your Memory, Match the Colors!',
+                              style: TextStyle(
+                                fontSize: 16.0,
+                                color: Colors.black87,
+                              ),
                             ),
                           ),
                         ),
@@ -118,7 +121,7 @@ class HomeScreen extends StatelessWidget {
                                   onPressed: () {
                                     context.push('/ready');
                                   },
-                                  color: lightCoral,
+                                  color: skyBlue,
                                   fontSize: 32.0,
                                 ),
                               ),
