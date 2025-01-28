@@ -26,6 +26,17 @@ class GameViewModel with ChangeNotifier {
   }
 
   void generateRandomOrder(int colorGroup) async {
+    int amount = 3;
+    //todo amount
+    if(_state.score >= 40) {
+      amount = 7;
+    }else if(_state.score >= 30) {
+      amount = 6;
+    }else if(_state.score >= 20) {
+      amount = 5;
+    }else if(_state.score >= 10) {
+      amount = 4;
+    }
     final List<Color> colors;
     switch(colorGroup) {
       case 0:
@@ -45,7 +56,7 @@ class GameViewModel with ChangeNotifier {
         break;
     }
     final List<Color> tmpColors = [...colors]..shuffle();
-    final List<Color> randomOrder = tmpColors.take(3).toList();
+    final List<Color> randomOrder = tmpColors.take(amount).toList();
     List<Color> tmpShuffledOrder;
     do {
       tmpShuffledOrder = [...randomOrder]..shuffle();
@@ -87,16 +98,53 @@ class GameViewModel with ChangeNotifier {
     notifyListeners();
   }
 
+  void showOrder() async {
+    if(_state.hint > 0) {
+      _state = _state.copyWith(
+        hint: _state.hint - 1,
+        showRemainingTime: 5,
+        isShowOrder: true,
+      );
+    }else {
+      _state = _state.copyWith(
+        isHintAdWatched: true,
+        showRemainingTime: 5,
+        isShowOrder: true,
+      );
+    }
+    notifyListeners();
+    _timer = Timer.periodic(const Duration(milliseconds: 1000), (timer) {
+      if(_state.showRemainingTime > 0) {
+        _state = _state.copyWith(
+          showRemainingTime: _state.showRemainingTime - 1,
+        );
+      }else {
+        _timer?.cancel();
+        _state = _state.copyWith(
+          isShowOrder: false,
+        );
+      }
+      notifyListeners();
+    });
+  }
+
+  void addBonusLife() async {
+    _state = _state.copyWith(
+      life: 1,
+      isLifeAdWatched: true,
+    );
+  }
 
   void onColorTap(Color color) async {
     final int selectedIndex = _state.userSelection!.length;
-    if (color == _state.randomOrder![selectedIndex]) {
+    if(color == _state.randomOrder![selectedIndex]) {
       _state = _state.copyWith(
         userSelection: [
           ..._state.userSelection!,
           color,
         ],
         isWrong: false,
+        //score: _state.score + 10, //todo score
       );
       final updatedShuffledOrder = _state.shuffledOrder!.map((colorOption) {
         if (colorOption.color == color && colorOption.order == null) {
@@ -105,19 +153,30 @@ class GameViewModel with ChangeNotifier {
         return colorOption;
       }).toList();
       _state = _state.copyWith(shuffledOrder: updatedShuffledOrder);
-    } else {
-      _state = _state.copyWith(
-        isWrong: true,
-        life: _state.life - 1,
-      );
+    }else {
+      if(_state.life > 1) {
+        _state = _state.copyWith(
+          isWrong: true,
+          life: _state.life - 1,
+        );
+      }else {
+        stopGame();
+      }
     }
-    if (_state.userSelection!.length == _state.randomOrder!.length) {
+    if(_state.userSelection!.length == _state.randomOrder!.length) {
       _state = _state.copyWith(
         isCorrect: true,
         score: _state.score + 10,
       );
     }
     notifyListeners();
+  }
+
+  void stopGame() async {
+    _state = _state.copyWith(
+      isStarted: false,
+    );
+    _gameEndController.add(_state.score);
   }
 
 }

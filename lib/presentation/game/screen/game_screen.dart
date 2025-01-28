@@ -1,15 +1,21 @@
+import 'package:color_order_match/presentation/components/common_flexible_button.dart';
 import 'package:color_order_match/presentation/components/common_text_button.dart';
 import 'package:color_order_match/presentation/game/game_state.dart';
+import 'package:color_order_match/ui/ui_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class GameScreen extends StatefulWidget {
   final GameState state;
   final Function(Color) onColorTap;
+  final VoidCallback onExitTap;
+  final VoidCallback onShowOrderTap;
 
   const GameScreen({
     required this.state,
     required this.onColorTap,
+    required this.onExitTap,
+    required this.onShowOrderTap,
     super.key,
   });
 
@@ -74,7 +80,7 @@ class _GameScreenState extends State<GameScreen> {
                         flex: 1,
                         child: Center(
                           child: SizedBox(
-                            height: 44.0,
+                            height: 48.0,
                             child: _showMessage
                                 ? const FittedBox(
                                   fit: BoxFit.scaleDown,
@@ -91,7 +97,7 @@ class _GameScreenState extends State<GameScreen> {
                                 ? Text(
                                   widget.state.showRemainingTime.toString(),
                                   style: const TextStyle(
-                                    fontSize: 32.0,
+                                    fontSize: 42.0,
                                     fontWeight: FontWeight.w700,
                                     color: Colors.black87,
                                   ),
@@ -111,7 +117,7 @@ class _GameScreenState extends State<GameScreen> {
                           ),
                         ),
                       ),
-                    const SizedBox(height: 12.0,),
+                    const SizedBox(height: 16.0,),
                     if(widget.state.randomOrder != null && widget.state.isShowOrder)
                       Expanded(
                         flex: 3,
@@ -159,12 +165,15 @@ class _GameScreenState extends State<GameScreen> {
                                       color: e.color,
                                     ),
                                     child: e.order != null ? Center(
-                                      child: Text(
-                                        '${e.order}',
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.w700,
-                                          fontSize: 32.0,
-                                          color: Colors.white,
+                                      child: FittedBox(
+                                        fit: BoxFit.scaleDown,
+                                        child: Text(
+                                          '${e.order}',
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 42.0,
+                                            color: Colors.white,
+                                          ),
                                         ),
                                       ),
                                     ) : null,
@@ -175,13 +184,25 @@ class _GameScreenState extends State<GameScreen> {
                           ],
                         ),
                       ),
-                    const SizedBox(height: 32.0,),
+                    const SizedBox(height: 16.0,),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: CommonFlexibleButton(
+                            text: 'Show Order',
+                            onPressed: widget.onShowOrderTap,
+                            color: skyBlue,
+                            fontSize: 18.0,
+                            minHeight: 56.0,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16.0,),
                     CommonTextButton(
                       text: 'Exit',
                       color: Colors.black87,
-                      onPressed: () {
-                        context.go('/');
-                      },
+                      onPressed: widget.onExitTap,
                     ),
                   ],
                 ),

@@ -1,9 +1,13 @@
 import 'dart:async';
 
 import 'package:color_order_match/config/di_setup.dart';
+import 'package:color_order_match/presentation/components/game_exit_dialog.dart';
+import 'package:color_order_match/presentation/components/game_over_dialog.dart';
+import 'package:color_order_match/presentation/components/hint_dialog.dart';
 import 'package:color_order_match/presentation/game/game_view_model.dart';
 import 'package:color_order_match/presentation/game/screen/game_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class GameRoot extends StatefulWidget {
   final int colorGroup;
@@ -27,7 +31,29 @@ class _GameRootState extends State<GameRoot> {
     super.initState();
     _viewModel = getIt<GameViewModel>();
     _subscription = _viewModel.gameEndStream.listen((score) {
-
+      if(mounted) {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) {
+            return GameOverDialog(
+              score: score,
+              bestScore: 0,
+              isAdWatched: _viewModel.state.isLifeAdWatched,
+              onCancelPressed: () async {
+                //if(_viewModel.state.score > _viewModel.state.bestScore!) {
+                  context.go('/');
+                //}else {
+                  //context.go('/');
+                //}
+              },
+              onAcceptPressed: () {
+                context.pop();
+              },
+            );
+          },
+        );
+      }
     });
   }
 
@@ -55,6 +81,55 @@ class _GameRootState extends State<GameRoot> {
               await Future.delayed(const Duration(milliseconds: 1500));
               _viewModel.clearWrong();
             }
+          },
+          onExitTap: () {
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (context) {
+                return GameExitDialog(
+                  score: _viewModel.state.score,
+                  bestScore: 0,
+                  onExitPressed: () async {
+                    //if(_viewModel.state.score > _viewModel.state.bestScore!) {
+                      context.go('/');
+                   // }else {
+                      //context.go('/');
+                    //}
+                  },
+                  onContinuePressed: () {
+                    context.pop();
+                  },
+                );
+              },
+            );
+          },
+          onShowOrderTap: () {
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (context) {
+                return HintDialog(
+                  hint: _viewModel.state.hint,
+                  onCancelPressed: () {
+                    context.pop();
+                  },
+                  onAcceptPressed: () {
+                    //todo ad
+                    _viewModel.showOrder();
+                    context.pop();
+                  },
+                  onConfirmPressed: () {
+                    context.pop();
+                  },
+                  onUseHintPressed: () {
+                    _viewModel.showOrder();
+                    context.pop();
+                  },
+                  isAdWatched: _viewModel.state.isHintAdWatched,
+                );
+              },
+            );
           },
         );
       },

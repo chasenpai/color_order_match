@@ -24,11 +24,13 @@ mixin _$GameState {
   bool get isShowOrder => throw _privateConstructorUsedError;
   bool get isWrong => throw _privateConstructorUsedError;
   bool get isCorrect => throw _privateConstructorUsedError;
-  bool get isWatchAd => throw _privateConstructorUsedError;
+  bool get isLifeAdWatched => throw _privateConstructorUsedError;
+  bool get isHintAdWatched => throw _privateConstructorUsedError;
   int get showRemainingTime => throw _privateConstructorUsedError;
   int get score => throw _privateConstructorUsedError;
   int? get bestScore => throw _privateConstructorUsedError;
   int get life => throw _privateConstructorUsedError;
+  int get hint => throw _privateConstructorUsedError;
   @JsonKey(includeFromJson: false)
   List<Color>? get randomOrder => throw _privateConstructorUsedError;
   @JsonKey(includeFromJson: false)
@@ -56,11 +58,13 @@ abstract class $GameStateCopyWith<$Res> {
       bool isShowOrder,
       bool isWrong,
       bool isCorrect,
-      bool isWatchAd,
+      bool isLifeAdWatched,
+      bool isHintAdWatched,
       int showRemainingTime,
       int score,
       int? bestScore,
       int life,
+      int hint,
       @JsonKey(includeFromJson: false) List<Color>? randomOrder,
       @JsonKey(includeFromJson: false) List<ColorOption>? shuffledOrder,
       @JsonKey(includeFromJson: false) List<Color>? userSelection});
@@ -85,11 +89,13 @@ class _$GameStateCopyWithImpl<$Res, $Val extends GameState>
     Object? isShowOrder = null,
     Object? isWrong = null,
     Object? isCorrect = null,
-    Object? isWatchAd = null,
+    Object? isLifeAdWatched = null,
+    Object? isHintAdWatched = null,
     Object? showRemainingTime = null,
     Object? score = null,
     Object? bestScore = freezed,
     Object? life = null,
+    Object? hint = null,
     Object? randomOrder = freezed,
     Object? shuffledOrder = freezed,
     Object? userSelection = freezed,
@@ -111,9 +117,13 @@ class _$GameStateCopyWithImpl<$Res, $Val extends GameState>
           ? _value.isCorrect
           : isCorrect // ignore: cast_nullable_to_non_nullable
               as bool,
-      isWatchAd: null == isWatchAd
-          ? _value.isWatchAd
-          : isWatchAd // ignore: cast_nullable_to_non_nullable
+      isLifeAdWatched: null == isLifeAdWatched
+          ? _value.isLifeAdWatched
+          : isLifeAdWatched // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isHintAdWatched: null == isHintAdWatched
+          ? _value.isHintAdWatched
+          : isHintAdWatched // ignore: cast_nullable_to_non_nullable
               as bool,
       showRemainingTime: null == showRemainingTime
           ? _value.showRemainingTime
@@ -130,6 +140,10 @@ class _$GameStateCopyWithImpl<$Res, $Val extends GameState>
       life: null == life
           ? _value.life
           : life // ignore: cast_nullable_to_non_nullable
+              as int,
+      hint: null == hint
+          ? _value.hint
+          : hint // ignore: cast_nullable_to_non_nullable
               as int,
       randomOrder: freezed == randomOrder
           ? _value.randomOrder
@@ -160,11 +174,13 @@ abstract class _$$GameStateImplCopyWith<$Res>
       bool isShowOrder,
       bool isWrong,
       bool isCorrect,
-      bool isWatchAd,
+      bool isLifeAdWatched,
+      bool isHintAdWatched,
       int showRemainingTime,
       int score,
       int? bestScore,
       int life,
+      int hint,
       @JsonKey(includeFromJson: false) List<Color>? randomOrder,
       @JsonKey(includeFromJson: false) List<ColorOption>? shuffledOrder,
       @JsonKey(includeFromJson: false) List<Color>? userSelection});
@@ -187,11 +203,13 @@ class __$$GameStateImplCopyWithImpl<$Res>
     Object? isShowOrder = null,
     Object? isWrong = null,
     Object? isCorrect = null,
-    Object? isWatchAd = null,
+    Object? isLifeAdWatched = null,
+    Object? isHintAdWatched = null,
     Object? showRemainingTime = null,
     Object? score = null,
     Object? bestScore = freezed,
     Object? life = null,
+    Object? hint = null,
     Object? randomOrder = freezed,
     Object? shuffledOrder = freezed,
     Object? userSelection = freezed,
@@ -213,9 +231,13 @@ class __$$GameStateImplCopyWithImpl<$Res>
           ? _value.isCorrect
           : isCorrect // ignore: cast_nullable_to_non_nullable
               as bool,
-      isWatchAd: null == isWatchAd
-          ? _value.isWatchAd
-          : isWatchAd // ignore: cast_nullable_to_non_nullable
+      isLifeAdWatched: null == isLifeAdWatched
+          ? _value.isLifeAdWatched
+          : isLifeAdWatched // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isHintAdWatched: null == isHintAdWatched
+          ? _value.isHintAdWatched
+          : isHintAdWatched // ignore: cast_nullable_to_non_nullable
               as bool,
       showRemainingTime: null == showRemainingTime
           ? _value.showRemainingTime
@@ -232,6 +254,10 @@ class __$$GameStateImplCopyWithImpl<$Res>
       life: null == life
           ? _value.life
           : life // ignore: cast_nullable_to_non_nullable
+              as int,
+      hint: null == hint
+          ? _value.hint
+          : hint // ignore: cast_nullable_to_non_nullable
               as int,
       randomOrder: freezed == randomOrder
           ? _value._randomOrder
@@ -257,11 +283,13 @@ class _$GameStateImpl implements _GameState {
       this.isShowOrder = false,
       this.isWrong = false,
       this.isCorrect = false,
-      this.isWatchAd = false,
+      this.isLifeAdWatched = false,
+      this.isHintAdWatched = false,
       this.showRemainingTime = 5,
       this.score = 0,
       this.bestScore,
       this.life = 3,
+      this.hint = 3,
       @JsonKey(includeFromJson: false) final List<Color>? randomOrder,
       @JsonKey(includeFromJson: false) final List<ColorOption>? shuffledOrder,
       @JsonKey(includeFromJson: false) final List<Color>? userSelection})
@@ -286,7 +314,10 @@ class _$GameStateImpl implements _GameState {
   final bool isCorrect;
   @override
   @JsonKey()
-  final bool isWatchAd;
+  final bool isLifeAdWatched;
+  @override
+  @JsonKey()
+  final bool isHintAdWatched;
   @override
   @JsonKey()
   final int showRemainingTime;
@@ -298,6 +329,9 @@ class _$GameStateImpl implements _GameState {
   @override
   @JsonKey()
   final int life;
+  @override
+  @JsonKey()
+  final int hint;
   final List<Color>? _randomOrder;
   @override
   @JsonKey(includeFromJson: false)
@@ -333,7 +367,7 @@ class _$GameStateImpl implements _GameState {
 
   @override
   String toString() {
-    return 'GameState(isStarted: $isStarted, isShowOrder: $isShowOrder, isWrong: $isWrong, isCorrect: $isCorrect, isWatchAd: $isWatchAd, showRemainingTime: $showRemainingTime, score: $score, bestScore: $bestScore, life: $life, randomOrder: $randomOrder, shuffledOrder: $shuffledOrder, userSelection: $userSelection)';
+    return 'GameState(isStarted: $isStarted, isShowOrder: $isShowOrder, isWrong: $isWrong, isCorrect: $isCorrect, isLifeAdWatched: $isLifeAdWatched, isHintAdWatched: $isHintAdWatched, showRemainingTime: $showRemainingTime, score: $score, bestScore: $bestScore, life: $life, hint: $hint, randomOrder: $randomOrder, shuffledOrder: $shuffledOrder, userSelection: $userSelection)';
   }
 
   @override
@@ -348,14 +382,17 @@ class _$GameStateImpl implements _GameState {
             (identical(other.isWrong, isWrong) || other.isWrong == isWrong) &&
             (identical(other.isCorrect, isCorrect) ||
                 other.isCorrect == isCorrect) &&
-            (identical(other.isWatchAd, isWatchAd) ||
-                other.isWatchAd == isWatchAd) &&
+            (identical(other.isLifeAdWatched, isLifeAdWatched) ||
+                other.isLifeAdWatched == isLifeAdWatched) &&
+            (identical(other.isHintAdWatched, isHintAdWatched) ||
+                other.isHintAdWatched == isHintAdWatched) &&
             (identical(other.showRemainingTime, showRemainingTime) ||
                 other.showRemainingTime == showRemainingTime) &&
             (identical(other.score, score) || other.score == score) &&
             (identical(other.bestScore, bestScore) ||
                 other.bestScore == bestScore) &&
             (identical(other.life, life) || other.life == life) &&
+            (identical(other.hint, hint) || other.hint == hint) &&
             const DeepCollectionEquality()
                 .equals(other._randomOrder, _randomOrder) &&
             const DeepCollectionEquality()
@@ -372,11 +409,13 @@ class _$GameStateImpl implements _GameState {
       isShowOrder,
       isWrong,
       isCorrect,
-      isWatchAd,
+      isLifeAdWatched,
+      isHintAdWatched,
       showRemainingTime,
       score,
       bestScore,
       life,
+      hint,
       const DeepCollectionEquality().hash(_randomOrder),
       const DeepCollectionEquality().hash(_shuffledOrder),
       const DeepCollectionEquality().hash(_userSelection));
@@ -403,11 +442,13 @@ abstract class _GameState implements GameState {
       final bool isShowOrder,
       final bool isWrong,
       final bool isCorrect,
-      final bool isWatchAd,
+      final bool isLifeAdWatched,
+      final bool isHintAdWatched,
       final int showRemainingTime,
       final int score,
       final int? bestScore,
       final int life,
+      final int hint,
       @JsonKey(includeFromJson: false) final List<Color>? randomOrder,
       @JsonKey(includeFromJson: false) final List<ColorOption>? shuffledOrder,
       @JsonKey(includeFromJson: false)
@@ -425,7 +466,9 @@ abstract class _GameState implements GameState {
   @override
   bool get isCorrect;
   @override
-  bool get isWatchAd;
+  bool get isLifeAdWatched;
+  @override
+  bool get isHintAdWatched;
   @override
   int get showRemainingTime;
   @override
@@ -434,6 +477,8 @@ abstract class _GameState implements GameState {
   int? get bestScore;
   @override
   int get life;
+  @override
+  int get hint;
   @override
   @JsonKey(includeFromJson: false)
   List<Color>? get randomOrder;
