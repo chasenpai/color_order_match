@@ -27,7 +27,7 @@ const pink = Color(0xFFFFC0CB);
 const lightGreen = Color(0xFFADFF2F);
 const magenta = Color(0xFFFF1493);
 
-//rainbow
+//classic
 const red = Color(0xFFFF0000);
 const orange = Color(0xFFFFA500);
 const yellow = Color(0xFFFFFF00);
@@ -53,7 +53,7 @@ const pastelYellow = Color(0xFFFFE4B5);
 const pastelGreen = Color(0xFF77DD77);
 const pastelPurple = Color(0xFFB39EB5);
 const pastelOrange = Color(0xFFFFB347);
-const pastelPeach = Color(0xFFFFDAB9);
+const pastelMint = Color(0xFFAAF0D1);
 
 List<Color> pastel = [
   const Color(0xFFFFC0CB),
@@ -62,7 +62,7 @@ List<Color> pastel = [
   const Color(0xFF77DD77),
   const Color(0xFFB39EB5),
   const Color(0xFFFFB347),
-  const Color(0xFFFFDAB9),
+  const Color(0xFFAAF0D1),
 ];
 
 //neon
@@ -71,7 +71,7 @@ const neonGreen = Color(0xFF39FF14); // 네온 그린
 const neonPink = Color(0xFFFF073A); // 네온 핑크
 const neonBlue = Color(0xFF00F9FF); // 네온 블루
 const neonYellow = Color(0xFFFFFC00); // 네온 옐로우
-const neonMagenta = Color(0xFFF21D79); // 네온 마젠타
+const neonMagenta = Color(0xFFFF007F); // 네온 마젠타
 const neonPurple = Color(0xFF8B00FF); // 네온 퍼플
 
 List<Color> neon = [
@@ -80,7 +80,7 @@ List<Color> neon = [
   const Color(0xFFFF073A),
   const Color(0xFF00F9FF),
   const Color(0xFFFFFC00),
-  const Color(0xFFF21D79),
+  const Color(0xFFFF007F),
   const Color(0xFF8B00FF),
 ];
 

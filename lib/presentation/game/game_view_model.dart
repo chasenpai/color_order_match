@@ -1,15 +1,16 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:collection/collection.dart';
 import 'package:color_order_match/domain/model/color_option.dart';
+import 'package:color_order_match/domain/repository/record_repository.dart';
 import 'package:color_order_match/presentation/game/game_state.dart';
 import 'package:color_order_match/ui/ui_colors.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:color_order_match/domain/model/record.dart';
 
 class GameViewModel with ChangeNotifier {
 
-  final Random _random = Random();
+  final RecordRepository _recordRepository;
   late Timer? _timer;
 
   GameState _state = const GameState();
@@ -18,7 +19,12 @@ class GameViewModel with ChangeNotifier {
   final _gameEndController = StreamController<int>();
   Stream<int> get gameEndStream => _gameEndController.stream;
 
+  GameViewModel({
+    required RecordRepository recordRepository,
+  }) : _recordRepository = recordRepository;
+
   void startGame(int colorGroup) async {
+    _loadRecord(colorGroup);
     generateRandomOrder(colorGroup);
     _state = _state.copyWith(
       isStarted: true,
@@ -28,13 +34,13 @@ class GameViewModel with ChangeNotifier {
   void generateRandomOrder(int colorGroup) async {
     int amount = 3;
     //todo amount
-    if(_state.score >= 40) {
+    if(_state.score >= 200) {
       amount = 7;
-    }else if(_state.score >= 30) {
+    }else if(_state.score >= 150) {
       amount = 6;
-    }else if(_state.score >= 20) {
+    }else if(_state.score >= 100) {
       amount = 5;
-    }else if(_state.score >= 10) {
+    }else if(_state.score >= 50) {
       amount = 4;
     }
     final List<Color> colors;
@@ -177,6 +183,71 @@ class GameViewModel with ChangeNotifier {
       isStarted: false,
     );
     _gameEndController.add(_state.score);
+  }
+
+  Future<void> updateRecord(int colorGroup) async {
+    final record = await _recordRepository.getRecord();
+    if(record != null) {
+      switch(colorGroup) {
+        case 0:
+          final newRecord = record.copyWith(
+            classic: _state.score,
+          );
+          await _recordRepository.saveRecord(newRecord);
+          break;
+        case 1:
+          final newRecord = record.copyWith(
+            pastel: _state.score,
+          );
+          await _recordRepository.saveRecord(newRecord);
+          break;
+        case 2:
+          final newRecord = record.copyWith(
+            neon: _state.score,
+          );
+          await _recordRepository.saveRecord(newRecord);
+          break;
+        case 3:
+          final newRecord = record.copyWith(
+            vintage: _state.score,
+          );
+          await _recordRepository.saveRecord(newRecord);
+          break;
+      }
+    }
+  }
+
+  void _loadRecord(int colorGroup) async {
+    int bestScore = 0;
+    final record = await _recordRepository.getRecord();
+    if(record != null) {
+      switch(colorGroup) {
+        case 0:
+          bestScore = record.classic;
+          break;
+        case 1:
+          bestScore = record.pastel;
+          break;
+        case 2:
+          bestScore = record.neon;
+          break;
+        case 3:
+          bestScore = record.vintage;
+          break;
+      }
+    }else {
+      const newRecord = Record(
+        classic: 0,
+        pastel: 0,
+        neon: 0,
+        vintage: 0,
+      );
+      await _recordRepository.saveRecord(newRecord);
+    }
+    _state = _state.copyWith(
+      bestScore: bestScore,
+    );
+    notifyListeners();
   }
 
 }

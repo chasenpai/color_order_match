@@ -1,9 +1,14 @@
 import 'package:color_order_match/config/di_setup.dart';
 import 'package:color_order_match/config/router.dart';
+import 'package:color_order_match/data/entity/record_entity.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
-void main() {
+void main() async {
   diSetup();
+  await Hive.initFlutter();
+  Hive.registerAdapter<RecordEntity>(RecordEntityAdapter());
+  await Hive.openBox('color_order_match.db');
   runApp(const MyApp());
 }
 

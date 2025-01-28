@@ -93,7 +93,7 @@ class ReadyScreen extends StatelessWidget {
                                 ColorGroupButton(
                                   groupName: 'Neon',
                                   colors: const [
-                                    Color(0xFFF21D79),
+                                    Color(0xFFFF007F),
                                     Color(0xFFFFFC00),
                                     Color(0xFF39FF14),
                                     Color(0xFF00F9FF),

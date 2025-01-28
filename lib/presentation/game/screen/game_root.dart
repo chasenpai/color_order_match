@@ -38,16 +38,18 @@ class _GameRootState extends State<GameRoot> {
           builder: (context) {
             return GameOverDialog(
               score: score,
-              bestScore: 0,
+              bestScore: _viewModel.state.bestScore!,
               isAdWatched: _viewModel.state.isLifeAdWatched,
               onCancelPressed: () async {
-                //if(_viewModel.state.score > _viewModel.state.bestScore!) {
+                if(_viewModel.state.score > _viewModel.state.bestScore!) {
+                  await _viewModel.updateRecord(widget.colorGroup);
                   context.go('/');
-                //}else {
-                  //context.go('/');
-                //}
+                }else {
+                  context.go('/');
+                }
               },
               onAcceptPressed: () {
+                _viewModel.addBonusLife();
                 context.pop();
               },
             );
@@ -89,13 +91,14 @@ class _GameRootState extends State<GameRoot> {
               builder: (context) {
                 return GameExitDialog(
                   score: _viewModel.state.score,
-                  bestScore: 0,
+                  bestScore: _viewModel.state.bestScore!,
                   onExitPressed: () async {
-                    //if(_viewModel.state.score > _viewModel.state.bestScore!) {
+                    if(_viewModel.state.score > _viewModel.state.bestScore!) {
+                      await _viewModel.updateRecord(widget.colorGroup);
                       context.go('/');
-                   // }else {
-                      //context.go('/');
-                    //}
+                    }else {
+                      context.go('/');
+                    }
                   },
                   onContinuePressed: () {
                     context.pop();
