@@ -6,8 +6,10 @@ import 'package:color_order_match/presentation/components/game_over_dialog.dart'
 import 'package:color_order_match/presentation/components/hint_dialog.dart';
 import 'package:color_order_match/presentation/game/game_view_model.dart';
 import 'package:color_order_match/presentation/game/screen/game_screen.dart';
+import 'package:color_order_match/util/admob_service.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class GameRoot extends StatefulWidget {
   final int colorGroup;
@@ -26,6 +28,10 @@ class _GameRootState extends State<GameRoot> {
   late GameViewModel _viewModel;
   StreamSubscription? _subscription;
 
+  InterstitialAd? _interstitialAd;
+  RewardedAd? _lifeRewardedAd;
+  RewardedAd? _hintRewardedAd;
+
   @override
   void initState() {
     super.initState();
@@ -43,12 +49,17 @@ class _GameRootState extends State<GameRoot> {
               onCancelPressed: () async {
                 if(_viewModel.state.score > _viewModel.state.bestScore!) {
                   await _viewModel.updateRecord(widget.colorGroup);
+                  _interstitialAd!.show();
                   context.go('/');
                 }else {
+                  _interstitialAd!.show();
                   context.go('/');
                 }
               },
               onAcceptPressed: () {
+                _lifeRewardedAd!.show(onUserEarnedReward: (ad, rewardItem) {
+
+                });
                 _viewModel.addBonusLife();
                 context.pop();
               },
@@ -57,12 +68,72 @@ class _GameRootState extends State<GameRoot> {
         );
       }
     });
+    _loadInterstitialAd();
+    _loadLifeRewardedAd();
+    _loadHintRewardedAd();
   }
 
   @override
   void dispose() {
     _subscription?.cancel();
+    _interstitialAd?.dispose();
+    _lifeRewardedAd?.dispose();
+    _hintRewardedAd?.dispose();
     super.dispose();
+  }
+
+  void _loadInterstitialAd() {
+    InterstitialAd.load(
+      adUnitId: AdMobService.interstitialAdUnitId!,
+      request: const AdRequest(),
+      adLoadCallback: InterstitialAdLoadCallback(
+        onAdLoaded: (ad) {
+          _interstitialAd = ad;
+        },
+        onAdFailedToLoad: (error) {
+          _interstitialAd = null;
+        },
+      ),
+    );
+  }
+
+  void _loadLifeRewardedAd() {
+    RewardedAd.load(
+      adUnitId: AdMobService.lifeRewardedAdUnitId!,
+      request: const AdRequest(),
+      rewardedAdLoadCallback: RewardedAdLoadCallback(
+        onAdLoaded: (ad) {
+          _lifeRewardedAd = ad;
+        },
+        onAdFailedToLoad: (error) {
+          _lifeRewardedAd = null;
+        },
+      ),
+    );
+  }
+
+  void _loadHintRewardedAd() {
+    RewardedAd.load(
+      adUnitId: AdMobService.hintRewardedAdUnitId!,
+      request: const AdRequest(),
+      rewardedAdLoadCallback: RewardedAdLoadCallback(
+        onAdLoaded: (ad) {
+          _hintRewardedAd = ad;
+          _hintRewardedAd!.fullScreenContentCallback = FullScreenContentCallback(
+            onAdDismissedFullScreenContent: (ad) {
+              _viewModel.showOrder();
+              context.pop();
+            },
+            onAdFailedToShowFullScreenContent: (ad, error) {
+              context.pop();
+            }
+          );
+        },
+        onAdFailedToLoad: (error) {
+          _hintRewardedAd = null;
+        },
+      ),
+    );
   }
 
   @override
@@ -93,6 +164,7 @@ class _GameRootState extends State<GameRoot> {
                   score: _viewModel.state.score,
                   bestScore: _viewModel.state.bestScore!,
                   onExitPressed: () async {
+                    _interstitialAd!.show();
                     if(_viewModel.state.score > _viewModel.state.bestScore!) {
                       await _viewModel.updateRecord(widget.colorGroup);
                       context.go('/');
@@ -117,10 +189,10 @@ class _GameRootState extends State<GameRoot> {
                   onCancelPressed: () {
                     context.pop();
                   },
-                  onAcceptPressed: () {
-                    //todo ad
-                    _viewModel.showOrder();
-                    context.pop();
+                  onAcceptPressed: () async {
+                    _hintRewardedAd!.show(onUserEarnedReward: (ad, rewardItem) {
+                      print('earned');
+                    });
                   },
                   onConfirmPressed: () {
                     context.pop();

@@ -2,8 +2,10 @@ import 'package:color_order_match/presentation/components/common_flexible_button
 import 'package:color_order_match/presentation/components/common_text_button.dart';
 import 'package:color_order_match/presentation/game/game_state.dart';
 import 'package:color_order_match/ui/ui_colors.dart';
+import 'package:color_order_match/util/admob_service.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class GameScreen extends StatefulWidget {
   final GameState state;
@@ -26,6 +28,8 @@ class GameScreen extends StatefulWidget {
 class _GameScreenState extends State<GameScreen> {
 
   bool _showMessage = true;
+  BannerAd? _bannerAd;
+  bool _isBannerLoaded = false;
 
   @override
   void initState() {
@@ -33,11 +37,50 @@ class _GameScreenState extends State<GameScreen> {
     _startMessageTimer();
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if(_bannerAd == null && !_isBannerLoaded) {
+      _loadBannerAd();
+    }
+  }
+
+  Future<void> _loadBannerAd() async {
+    await Future.delayed(const Duration(milliseconds: 300));
+    final size = await AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
+        MediaQuery.sizeOf(context).width.truncate());
+    if (size == null) {
+      return;
+    }
+    BannerAd(
+      size: size,
+      adUnitId: AdMobService.bannerAdUnitId!,
+      listener: BannerAdListener(
+        onAdLoaded: (ad) {
+          setState(() {
+            _bannerAd = ad as BannerAd;
+            _isBannerLoaded = true;
+          });
+        },
+        onAdFailedToLoad: (ad, error) {
+          ad.dispose();
+        },
+      ),
+      request: const AdRequest(),
+    ).load();
+  }
+
   void _startMessageTimer() async {
     await Future.delayed(const Duration(seconds: 3));
     setState(() {
       _showMessage = false;
     });
+  }
+
+  @override
+  void dispose() {
+    _bannerAd?.dispose();
+    super.dispose();
   }
 
   @override
@@ -208,6 +251,14 @@ class _GameScreenState extends State<GameScreen> {
                 ),
               ),
             ),
+            if(_bannerAd != null && _isBannerLoaded)
+              SizedBox(
+                width: _bannerAd!.size.width.toDouble(),
+                height: _bannerAd!.size.height.toDouble(),
+                child: AdWidget(
+                  ad: _bannerAd!,
+                ),
+              ),
           ],
         ),
       ),
